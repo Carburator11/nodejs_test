@@ -16,17 +16,35 @@ app.get('/', (request, response) => {
         console.log("Iplocation result: ", res)
         const url = `api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}`
         console.log(url)
-        fetch(url).then(
-            apiResponse => {
-                response.json(
-                    {'response': `hello, your IP address is ${ip}, your location is ${city || "<not found>"}`,
-                    'iplocation': res,
-                    'apiResponse': apiResponse
-                })
+        if(latitude && longitude){
 
-            }
-        )
+            fetch(url)
+                .then(
+                    apiResponse => {
+                        response.json(
+                            {'response': `hello, your IP address is ${ip}, your location is ${city || "<not found>"}`,
+                            'iplocation': res,
+                            'apiResponse': apiResponse
+                        })
+                    }
+                )
+                .catch(
+                    response.json(
+                        {'response': `hello, your IP address is ${ip}, your location is ${city || "<not found>"}`,
+                        'iplocation': res,
+                        'apiResponse': "Weather API error"
+                        }
+                    )
+                )
+        } else {
+            response.json(
+                {'response': `hello, your IP address is ${ip}, your location is ${city || "<not found>"}`,
+                'iplocation': res,
+                'apiResponse': "IP location error"
+                }
+            )
+        }
     })
-} )
+})
 
 app.listen(port, ()=> console.log(`Listening on port ${port}`))
