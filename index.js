@@ -7,14 +7,15 @@ const port = process.env.PORT || 3000
 
 app.get('/', (request, response) => {
     const { ip } = request
-    console.log("IP: ", ip)
+    var ipFromHeader = request.headers["x-forwarded-for"]
+    console.log("IP: ", ip, " - ", ipFromHeader)
 
     iplocation(ip, (error, res) => {
         //const {lat, lon, city} = res
         console.log("Iplocation result: ", res)
         // console.log(`Ip adress ${ip} located in ${city || "<not found>"} (${lat}, ${lon}) `)
         response.json(
-            {'response': `hello, your IP address is ${ip}, your location is ${"<not found>"}`,
+            {'response': `hello, your IP address is ${ip} / ${ipFromHeader}, your location is ${"<not found>"}`,
             'iplocation': res
         })
     })
