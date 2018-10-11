@@ -4,6 +4,7 @@ const iplocation =require('iplocation')
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
+var fetch = require("node-fetch");
 
 app.get('/', (request, response) => {
     const ipFromHeader = request.headers["x-forwarded-for"]
@@ -11,12 +12,20 @@ app.get('/', (request, response) => {
     console.log("IP: ", ip)
 
     iplocation(ip, (error, res) => {
-        const {lat, lon, city} = res
+        const {latitude, longitude, city} = res
         console.log("Iplocation result: ", res)
-        response.json(
-            {'response': `hello, your IP address is ${ip}, your location is ${city || "<not found>"}`,
-            'iplocation': res
-        })
+        const url = `api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}`
+        console.log(url)
+        fetch(url).then(
+            apiResponse => {
+                response.json(
+                    {'response': `hello, your IP address is ${ip}, your location is ${city || "<not found>"}`,
+                    'iplocation': res,
+                    'apiResponse': apiResponse
+                })
+
+            }
+        )
     })
 } )
 
