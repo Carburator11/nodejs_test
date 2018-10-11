@@ -5,9 +5,9 @@ const express = require('express')
 const app = express()
 
 app.get('/', (request, response) => {
-    console.log("hello")
-    const ip =request.headers['x-forwarded-for'] || request.connection.remoteAddress;
-    console.log("IP: ", ip, " - ", request.ip)
+    const { ip } = request
+    console.log("IP: ", ip)
+
     iplocation(ip, (error, res) => {
         //const {lat, lon, city} = res
         console.log("Iplocation result: ", res)
