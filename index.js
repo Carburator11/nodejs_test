@@ -14,7 +14,10 @@ app.get('/', (request, response) => {
     iplocation(ip, (error, res) => {
         const {latitude, longitude, city} = res
         console.log("Iplocation result: ", res)
-        const url = `api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}`
+        
+        // it's just a test project!
+        const apiKey = "e9b13ab6140094e90af27864db89a7b1"
+        const url = `api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${apiKey}`
         console.log(url)
         if(latitude && longitude){
 
