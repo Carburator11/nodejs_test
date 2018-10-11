@@ -6,15 +6,15 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.get('/', (request, response) => {
-    const ip = request.headers["x-forwarded-for"].split(',')[0] || request.ip
+    const ipFromHeader = request.headers["x-forwarded-for"]
+    const ip = ipFromHeader ? ipFromHeader.split(',')[0] : request.ip
     console.log("IP: ", ip)
 
     iplocation(ip, (error, res) => {
-        //const {lat, lon, city} = res
+        const {lat, lon, city} = res
         console.log("Iplocation result: ", res)
-        // console.log(`Ip adress ${ip} located in ${city || "<not found>"} (${lat}, ${lon}) `)
         response.json(
-            {'response': `hello, your IP address is ${ip} / ${ipFromHeader}, your location is ${"<not found>"}`,
+            {'response': `hello, your IP address is ${ip}, your location is ${city || "<not found>"}`,
             'iplocation': res
         })
     })
