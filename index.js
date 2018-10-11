@@ -6,9 +6,8 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.get('/', (request, response) => {
-    const { ip } = request
-    var ipFromHeader = request.headers["x-forwarded-for"]
-    console.log("IP: ", ip, " - ", ipFromHeader)
+    const ip = request.headers["x-forwarded-for"].split(',')[0] || request.ip
+    console.log("IP: ", ip)
 
     iplocation(ip, (error, res) => {
         //const {lat, lon, city} = res
